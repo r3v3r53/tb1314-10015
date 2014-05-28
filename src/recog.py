@@ -46,7 +46,7 @@ class Recog:
     def LDN(self, x, y):
         i = 8 * max(self.convultions[k][x][y] for k in range(len(self.masks)))
         j = min(self.convultions[k][x][y] for k in range(len(self.masks)))
-        
+        print x, y, i+j
         return i + j
         
 r = Recog("mirror.jpg")
