@@ -1,4 +1,4 @@
-from LH import LH
+from LH import *
 
 def compare(f1, f2, i = None, val = 0):
     if i == None: i = len(f1)
@@ -18,5 +18,9 @@ f3 = tres.code()
 f1_f2 = compare(f1,f2)
 f1_f3 = compare(f1,f3)
 
-print f1_f2, f1_f3
+for a in f1:
+    print a
 
+print f2
+
+print len(f2)
