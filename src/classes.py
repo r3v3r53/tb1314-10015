@@ -24,9 +24,6 @@ class Line(Base):
     id = Column(Integer, primary_key=True)
     value = Column(Float(precision="20"))
                         
-
-    
-
 class Con:
     def __init__(self, db):
         self.db = db
