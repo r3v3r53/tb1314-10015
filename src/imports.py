@@ -1,6 +1,7 @@
 class Folders:
-    def __init__(self):
+    def __init__(self, folder):
         print "folders\r\n"
+
 
 class Folder:
     def __init__(self):
