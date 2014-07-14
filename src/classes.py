@@ -1,4 +1,7 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Float
+from sqlalchemy.dialects.sqlite import BLOB
+
+
+from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Float, Enum
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
@@ -19,10 +22,13 @@ class Photo(Base):
     details = Column(String(500))
     subject = relationship(Subject)
 
-class Line(Base):
+class Code(Base):
     __tablename__ = 'line'
     id = Column(Integer, primary_key=True)
-    value = Column(Float(precision="20"))
+    value = Column(BLOB)
+    type = Column(Enum('LDNK', 'LDNG', name='types'))
+    photo_id = Column(Integer, ForeignKey('photo.id', onupdate="CASCADE", ondelete="CASDADE"))
+    photo = relationship(Photo)
                         
 class Con:
     def __init__(self, db):
