@@ -16,7 +16,7 @@ class LH:
         np.array([[-3, -3, -3], [-3, 0, 5], [-3, 5, 5]])
     ]
     
-    def __init__(self, image, sig):
+    def __init__(self, image, shape, sig):
         self.sig = sig
         self.image = cv2.imread(image, cv2.CV_LOAD_IMAGE_GRAYSCALE)
         self.g_masks = [cv2.GaussianBlur(self.image, (x, 1), sig) for x in range(1,31,4)]
