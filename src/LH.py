@@ -5,7 +5,7 @@ import scipy.signal as signal
 
 class LH:
     # kirsch compass masks
-    masks = [
+    k_masks = [
         np.array([[-3, -3, 5], [-3, 0, 5], [-3, -3, 5]]),
         np.array([[-3, 5, 5], [-3, 0, 5], [-3, -3, -3]]),
         np.array([[5, 5, 5], [-3, 0, -3], [-3, -3, -3]]),
@@ -16,11 +16,15 @@ class LH:
         np.array([[-3, -3, -3], [-3, 0, 5], [-3, 5, 5]])
     ]
     
-    def __init__(self, image):
-        
+    def __init__(self, image, sig):
+        self.sig = sig
         self.image = cv2.imread(image, cv2.CV_LOAD_IMAGE_GRAYSCALE)
+        self.g_masks = [cv2.GaussianBlur(self.image, (x, 1), sig) for x in range(1,31,4)]
+        print self.g_masks
+        print self.k_masks
+        return 0
         # criar convultions da imagem para cada uma das masks
-        self.convultions = [signal.convolve2d(self.image, self.masks[x]) for x in range(len(self.masks))]
+        self.k_convultions = [signal.convolve2d(self.image, self.masks[x]) for x in range(len(self.masks))]
         ldnk = np.array([[0 for x in self.image] for x in self.image[0]])
         ldng = np.array([[0 for x in self.image] for x in self.image[0]])
         for x in range(len(self.image)):
@@ -40,18 +44,18 @@ class LH:
                 self.ldnk = np.concatenate((self.ldnk, ret))
 
     def LDNk(self, x, y):
-        i = 8 * max(self.convultions[k][x][y] for k in range(len(self.masks)))
-        j = min(self.convultions[k][x][y] for k in range(len(self.masks)))
+        i = 8 * max(self.k_convultions[k][x][y] for k in range(len(self.k_masks)))
+        j = min(self.k_convultions[k][x][y] for k in range(len(self.k_masks)))
         return i + j
-    
-    def LDNg(self, x, y):
-        
-    def G(self, x, y, sig):
-        return (1 / (2 * math.pi * sig ** 2)) * math.exp( -((x ** 2 + y ** 2) / (2 * sig ** 2)))
 
-    def MasksG(self, x, y, sig):
-        
+    def LDNg(self, x, y):
+        i = 8 * max(self.g_convultions[k][x][y] for k in range(len(self.g_masks)))
+        j = min(self.g_convultions[k][x][y] for k in range(len(self.g_masks)))
+        return i + j
 
                                                         
-    def code(self):
+    def LDNkCode(self):
         return self.ldnk
+
+    def LDNgCode(self):
+        return self.ldng
