@@ -18,9 +18,5 @@ f3 = tres.code()
 f1_f2 = compare(f1,f2)
 f1_f3 = compare(f1,f3)
 
-for a in f1:
-    print a
 
-print f2
-
-print len(f2)
+print f1_f2, f1_f3
