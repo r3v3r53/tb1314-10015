@@ -9,14 +9,21 @@ def compare(f1, f2, i = None, val = 0):
     return compare(f1, f2, i, val)
 
 
-uma = LH("mirror.jpg")
-duas = LH("mirror2.jpg")
-tres = LH("people.jpg")
-f1 = uma.code()
-f2 = duas.code()
-f3 = tres.code()
+uma = LH("mirror.jpg", 0.3)
+duas = LH("mirror2.jpg", 0.3)
+tres = LH("people.jpg", 0.3)
+f1 = uma.LDNkCode()
+f2 = duas.LDNkCode()
+f3 = tres.LDNkCode()
 f1_f2 = compare(f1,f2)
 f1_f3 = compare(f1,f3)
 
+f1 = uma.LDNgCode()
+f2 = duas.LDNgCode()
+f3 = tres.LDNgCode()
+f1__f2 = compare(f1,f2)
+f1__f3 = compare(f1,f3)
+
 
 print f1_f2, f1_f3
+print f1__f2, f1__f3
