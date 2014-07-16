@@ -1,5 +1,4 @@
 from LH import *
-
 def compare(f1, f2, i = None, val = 0):
     if i == None: i = len(f1)
     if i == 0: return val
