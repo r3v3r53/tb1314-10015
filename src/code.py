@@ -2,13 +2,14 @@ import cv2
 import numpy as np
 import scipy.signal as signal
 
+# Gerar o codigo LH para uma imagem
 class LH():
     def __init__(self, image, masks):
         self.image = cv2.imread(image, cv2.CV_LOAD_IMAGE_GRAYSCALE)
         self.divisions = 5
         self.masks = masks
         self.convultions = [
-            signal.convolve2d(self.image, mask for mask in self.masks)
+            signal.convolve2d(self.image, mask) for mask in self.masks
         ]
         self.ldn = np.array(
             [[0 for x in self.image] for x in self[image[0]]]
@@ -34,19 +35,20 @@ class LH():
                 self.ldn = np.concatenate((self.ldn, ret))
                 
     def LDN(self, x, y):
-        i = 8 * max(self.convultions[k][x][y] \
+        i = 8 * max(self.convultions[k][x][y] 
                     for k in range(n_masks))
-        j = min(self.k_convultions[k][x][y] \
+        j = min(self.k_convultions[k][x][y] 
                 for k in range(n_masks))
         return i + j
 
     def convolve(self, masks):
-        self.convultions = [signal.convolve2D(self.image, mask) \
-                           for mask in masks]
+        self.convultions = [signal.convolve2D(self.image, mask) 
+                            for mask in masks]
 
     def code(self):
         return self.ldn
 
+#reconhecimento atraves de filtros com mascaras Kirsh
 class Kirsh(LH):
 
     def __init__(self, image):
@@ -62,10 +64,40 @@ class Kirsh(LH):
         ]
         super().__init__(image, self.masks)
 
+# reconhecimento atraves de filtros gaussian
 class Gaussian(LH):
     def __init__(self, image, sigma):
-         self.masks = [
-             cv2.GaussianBlur(self.image, (x, 1), sig) 
-             for x in range(1,31,4)
-         ]
-         super().__init__(image, self.masks)
+        self.k = [(0,1), (1,1), (1,0), (1,-1), 
+                  (0,-1), (-1,-1), (-1,0), (-1,1) ]
+        self.code1 = np.array([[0 for x in image] for x in image[0]])
+        self.code2 = np.array([[0 for x in image] for x in image[0]])
+        self.masks = []
+        self.buildMasks()
+         
+        super().__init__(image, self.masks)
+
+    # filtro gaussian
+    def G(self, x, y, sigma):
+        a = 1/(2 * np.pi * (sigma**2))
+        b = -(((x**2)+(y**2))/(2*(sigma**2)))
+        c = a * np.exp(b)
+        return c
+
+    #funcao para obter os resultado dos dois filtros
+    # sendo "a" a que foi alvo da rotacao     
+
+    def M(self, x, y, sigma, k):
+        a = G(x + k[0], y + k[1], sigma)
+        b = G(x, y, sigma)
+        return a, b
+
+    # criar as 8 mascaras
+    # as mascaras aqui sao criadas com a mesma 
+    # dimensao da imagem
+    def builMasks(self):
+        for i in range(0,7):
+            for y in range(len(self.image)):
+                for x in range(len(self.image[y])):
+                    self.code1[y][x], self.code2[y][x] = \
+                    self.M(x, y, self.sigma, self.k[i])
+        self.masks.append(signal.convolve2d(code1, code2))
