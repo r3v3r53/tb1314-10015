@@ -62,7 +62,7 @@ class Kirsh(LH):
             np.array([[-3, -3, -3], [-3, 0, -3], [5, 5, 5]]),
             np.array([[-3, -3, -3], [-3, 0, 5], [-3, 5, 5]])
         ]
-        super().__init__(image, self.masks)
+        LH.__init__(self, image, self.masks)
 
 # reconhecimento atraves de filtros gaussian
 class Gaussian(LH):
@@ -74,7 +74,7 @@ class Gaussian(LH):
         self.masks = []
         self.buildMasks()
          
-        super().__init__(image, self.masks)
+        super(Gaussian, self).__init__(image, self.masks)
 
     # filtro gaussian
     def G(self, x, y, sigma):
