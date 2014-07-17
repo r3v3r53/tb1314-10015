@@ -8,12 +8,15 @@ def compare(f1, f2, i = None, val = 0):
     return compare(f1, f2, i, val)
 
 
-uma = Kirsh("mirror.jpg")
-duas = Kirsh("mirror2.jpg")
-#tres = LH("people.jpg", 0.3)
+#uma = Kirsh("mirror.jpg")
+#duas = Kirsh("mirror2.jpg")
+#tres = Kirsh("people.jpg")
+uma = Gaussian("mirror.jpg", 0.3)
+duas = Gaussian("mirror2.jpg", 0.3)
+tres = Gaussian("people.jpg", 0.3)
 f1 = uma.code()
 f2 = duas.code()
-#f3 = tres.LDNkCode()
+f3 = tres.code()
 f1_f2 = compare(f1,f2)
 f1_f3 = compare(f1,f3)
 
@@ -23,6 +26,4 @@ f1_f3 = compare(f1,f3)
 #f1__f2 = compare(f1,f2)
 #f1__f3 = compare(f1,f3)
 
-
 print f1_f2, f1_f3
-#print f1__f2, f1__f3
