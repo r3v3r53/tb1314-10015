@@ -4,7 +4,8 @@ import scipy.signal as signal
 
 # Gerar o codigo LH para uma imagem
 class LH():
-    def __init__(self, img):
+    def __init__(self, img, masks):
+        self.masks = masks
         self.image = img
         self.divisions = 5
         self.convultions = [
@@ -51,6 +52,7 @@ class LH():
         return self.lh
 
 #reconhecimento atraves de filtros com mascaras Kirsh
+
 class Kirsh(LH):
 
     def __init__(self, img):
@@ -65,7 +67,7 @@ class Kirsh(LH):
             np.array([[-3, -3, -3], [-3, 0, -3], [5, 5, 5]]),
             np.array([[-3, -3, -3], [-3, 0, 5], [-3, 5, 5]])
         ]
-        LH.__init__(self, self.image)
+        LH.__init__(self, self.image, self.masks)
 
 # reconhecimento atraves de filtros gaussian
 class Gaussian(LH):
@@ -78,8 +80,8 @@ class Gaussian(LH):
         self.code2 = np.array([[0 for x in self.image] for x in self.image[0]])
         self.masks = []
         self.buildMasks()
-         
-        LH.__init__(self, self.image)
+        print self.masks
+        LH.__init__(self, self.image, self.masks)
 
     # filtro gaussian
     def G(self, x, y, sigma):
