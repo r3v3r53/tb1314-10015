@@ -4,15 +4,15 @@ import scipy.signal as signal
 
 # Gerar o codigo LH para uma imagem
 class LH():
-    def __init__(self, image, masks):
-        self.image = cv2.imread(image, cv2.CV_LOAD_IMAGE_GRAYSCALE)
+    def __init__(self, img):
+        self.image = cv2.imread(img, cv2.CV_LOAD_IMAGE_GRAYSCALE)
         self.divisions = 5
-        self.masks = masks
         self.convultions = [
             signal.convolve2d(self.image, mask) for mask in self.masks
         ]
         self.ldn = np.array(
-            [[0 for x in self.image] for x in self[image[0]]]
+            [[0 for x in range(len(self.image))] 
+             for x in range(len(self.image[0]))]
         )
         for x in range(len(self.image)):
             for y in range(len(self.image[0])):
@@ -32,12 +32,13 @@ class LH():
                                                density=True, 
                                                weights=cur)
                 ret = np.frombuffer(hist * np.diff(bin_edges))
-                self.ldn = np.concatenate((self.ldn, ret))
+        self.ldn = np.concatenate((self.ldn, ret))
                 
     def LDN(self, x, y):
+        n_masks = len(self.masks)
         i = 8 * max(self.convultions[k][x][y] 
                     for k in range(n_masks))
-        j = min(self.k_convultions[k][x][y] 
+        j = min(self.convultions[k][x][y] 
                 for k in range(n_masks))
         return i + j
 
@@ -51,7 +52,7 @@ class LH():
 #reconhecimento atraves de filtros com mascaras Kirsh
 class Kirsh(LH):
 
-    def __init__(self, image):
+    def __init__(self, img):
         self.masks = [
             np.array([[-3, -3, 5], [-3, 0, 5], [-3, -3, 5]]),
             np.array([[-3, 5, 5], [-3, 0, 5], [-3, -3, -3]]),
@@ -62,7 +63,7 @@ class Kirsh(LH):
             np.array([[-3, -3, -3], [-3, 0, -3], [5, 5, 5]]),
             np.array([[-3, -3, -3], [-3, 0, 5], [-3, 5, 5]])
         ]
-        LH.__init__(self, image, self.masks)
+        LH.__init__(self, img)
 
 # reconhecimento atraves de filtros gaussian
 class Gaussian(LH):
