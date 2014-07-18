@@ -58,7 +58,7 @@ class Kirsh():
         div = self.divisions
         for i in range(div):
             for j in range(div):
-                cur = self.image[i*len_x/div:i*len_x/div + len_x/div,
+                cur = self.ldn[i*len_x/div:i*len_x/div + len_x/div,
                                  j*len_y/div: j*len_y/div + len_y/div]
                 hist, bin_edges = np.histogram(cur,
                                                div,

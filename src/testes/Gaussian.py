@@ -3,20 +3,20 @@ import numpy as np
 import scipy.signal as signal
 
 class Gaussian():
-    def __init__(self, image, sigma):
+    def __init__(self, image, size, sigma):
         self.sigma = sigma
+        self.size = size
         self.image = cv2.imread(image, cv2.CV_LOAD_IMAGE_GRAYSCALE)
         self.k = [(0,1), (1,1), (1,0), (1,-1),
                   (0,-1), (-1,-1), (-1,0), (-1,1) ]
-        self.code1 = np.array([[0 for x in self.image] for x in self.image[0]])
-        self.code2 = np.array([[0 for x in self.image] for x in self.image[0]])
-        self.masks = []
-        self.buildMasks()
+        self.code1 = np.array([[0 for x in range(self.size)] for x in range(self.size)])
+        self.code2 = np.array([[0 for x in range(self.size)] for x in range(self.size)])
         self.divisions = 5
-        self.convultions = [
-            signal.convolve2d(self.image, mask) for mask in self.masks
-        ]
         self.lh = []
+
+
+
+
         self.ldn = np.array(
             [[0 for x in range(len(self.image))]
              for x in range(len(self.image[0]))]
@@ -59,8 +59,11 @@ class Gaussian():
         len_y = len(self.ldn[0])
         for i in range(self.divisions):
             for j in range(self.divisions):
-                cur = self.image[i*len_x/5:i*len_x/5 + len_x/5,
-                                j*len_y/5: j*len_y/5 + len_y/5]
+                x1 = i*len_x/5
+                x2 = i*len_x/5 + len_x/5
+                y1 = j*len_y/5
+                y2 = j*len_y/5 + len_y/5
+                cur = self.image[x1:x2, y1:y2]
                 hist, bin_edges = np.histogram(cur,
                                                5,
                                                density=True,
