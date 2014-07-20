@@ -21,6 +21,7 @@ class Kirsh():
 
         @arg img: localizacao e nome da imagem a analizar
         '''
+        self.divisions = 5
         self.image = cv2.imread(img, cv2.CV_LOAD_IMAGE_GRAYSCALE)
         self.masks = [
             np.array([[-3, -3, 5], [-3, 0, 5], [-3, -3, 5]]),
@@ -32,7 +33,6 @@ class Kirsh():
             np.array([[-3, -3, -3], [-3, 0, -3], [5, 5, 5]]),
             np.array([[-3, -3, -3], [-3, 0, 5], [-3, 5, 5]])
         ]
-        self.divisions = 5
         self.convultions = [
             signal.convolve2d(self.image, mask) for mask in self.masks
         ]
