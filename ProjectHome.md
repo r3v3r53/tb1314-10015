@@ -1,0 +1,1 @@
+Implementação paper: "Local Directional Number Pattern for Face Analysis: Face and Expression Recognition"
